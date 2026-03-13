@@ -4,6 +4,7 @@ import dev.resource_server.domain.auth.domain.Client;
 import dev.resource_server.domain.auth.dto.TokenRequest;
 import dev.resource_server.domain.auth.dto.TokenResponse;
 import dev.resource_server.domain.auth.repository.ClientRepository;
+import dev.resource_server.global.security.hanlder.OAuth2LoginSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ import java.io.IOException;
 public class AuthService {
 
     private final RestClientAuthorizationCodeTokenResponseClient tokenResponseClient;
+    private final OAuth2LoginSuccessHandler loginSuccessHandler;
     private final ClientRepository clientRepository;
 
     @Value("${auth.server.authorization-uri}")
@@ -32,6 +34,12 @@ public class AuthService {
 
     @Value("${auth.server.token-uri}")
     private String tokenUri;
+
+    @Value("${auth.server.client-id}")
+    private String clientId;
+
+    @Value("${auth.server.client-secret}")
+    private String clientSecret;
 
     @Value("${auth.server.grant-type}")
     private String grantType;
@@ -87,10 +95,10 @@ public class AuthService {
 
         OAuth2AccessTokenResponse tokenResponse = tokenResponseClient.getTokenResponse(grantRequest);
 
-        // Todo: DB 처리
+        String resourceJwt = loginSuccessHandler.onSuccess(tokenResponse);
 
         return TokenResponse.builder()
-                .accessToken(tokenResponse.getAccessToken().getTokenValue())
+                .accessToken(resourceJwt)
                 .build();
     }
 
