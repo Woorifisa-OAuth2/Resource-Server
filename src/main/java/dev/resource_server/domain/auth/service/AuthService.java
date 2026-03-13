@@ -35,12 +35,6 @@ public class AuthService {
     @Value("${auth.server.token-uri}")
     private String tokenUri;
 
-    @Value("${auth.server.client-id}")
-    private String clientId;
-
-    @Value("${auth.server.client-secret}")
-    private String clientSecret;
-
     @Value("${auth.server.grant-type}")
     private String grantType;
 

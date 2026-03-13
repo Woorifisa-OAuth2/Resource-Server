@@ -18,8 +18,7 @@ public class UserApi {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<UserResponse> getUser(@AuthenticationPrincipal Jwt jwt) {
-        String authId = jwt.getSubject();
+    public ResponseEntity<UserResponse> getUser(@AuthenticationPrincipal Long authId) {
         return ResponseEntity.ok(userService.getUser(authId));
     }
 }

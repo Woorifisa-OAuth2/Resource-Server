@@ -7,7 +7,7 @@ import lombok.Getter;
 public class UserResponse {
 
     private final String name;
-    private final String age;
+    private final Integer age;
     private final String gender;
 
     public UserResponse(User user) {
