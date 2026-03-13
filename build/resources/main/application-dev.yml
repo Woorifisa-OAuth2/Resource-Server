@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: resource-server
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/resource_server
+    username: root
+    password: jiwon0126
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+
+jwt:
+  secret: vnbuinfgjkwanuyfivvdshjfgwyuecnyuehwf
+  expiration: 604800000
