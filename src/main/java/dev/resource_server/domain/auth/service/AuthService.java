@@ -1,7 +1,9 @@
 package dev.resource_server.domain.auth.service;
 
+import dev.resource_server.domain.auth.domain.Client;
 import dev.resource_server.domain.auth.dto.TokenRequest;
 import dev.resource_server.domain.auth.dto.TokenResponse;
+import dev.resource_server.domain.auth.repository.ClientRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,18 +25,13 @@ import java.io.IOException;
 public class AuthService {
 
     private final RestClientAuthorizationCodeTokenResponseClient tokenResponseClient;
+    private final ClientRepository clientRepository;
 
     @Value("${auth.server.authorization-uri}")
     private String authorizationUri;
 
     @Value("${auth.server.token-uri}")
     private String tokenUri;
-
-    @Value("${auth.server.client-id}")
-    private String clientId;
-
-    @Value("${auth.server.client-secret}")
-    private String clientSecret;
 
     @Value("${auth.server.grant-type}")
     private String grantType;
@@ -46,9 +43,11 @@ public class AuthService {
     private String scope;
 
     public void authorize(HttpServletResponse response) throws IOException {
+        Client client = getClient();
+
         String redirectUrl = UriComponentsBuilder.fromUriString(authorizationUri)
                 .queryParam("response_type", "code")
-                .queryParam("client_id", clientId)
+                .queryParam("client_id", client.getClientId())
                 .queryParam("redirect_uri", redirectUri)
                 .queryParam("scope", scope)
                 .toUriString();
@@ -57,10 +56,12 @@ public class AuthService {
     }
 
     public TokenResponse getToken(TokenRequest request) {
+        Client client = getClient();
+
         ClientRegistration clientRegistration = ClientRegistration
                 .withRegistrationId("auth-server")
-                .clientId(clientId)
-                .clientSecret(clientSecret)
+                .clientId(client.getClientId())
+                .clientSecret(client.getClientSecret())
                 .authorizationGrantType(new AuthorizationGrantType(grantType))
                 .redirectUri(redirectUri)
                 .tokenUri(tokenUri)
@@ -69,7 +70,7 @@ public class AuthService {
 
         OAuth2AuthorizationRequest authorizationRequest = OAuth2AuthorizationRequest
                 .authorizationCode()
-                .clientId(clientId)
+                .clientId(client.getClientId())
                 .authorizationUri(authorizationUri)
                 .redirectUri(redirectUri)
                 .build();
@@ -91,5 +92,10 @@ public class AuthService {
         return TokenResponse.builder()
                 .accessToken(tokenResponse.getAccessToken().getTokenValue())
                 .build();
+    }
+
+    private Client getClient() {
+        return clientRepository.findTopByOrderByIdDesc()
+                .orElseThrow(() -> new IllegalStateException("등록된 클라이언트가 없습니다."));
     }
 }
