@@ -1,3 +1,32 @@
+auth:
+  server:
+    registration-uri: http://localhost:9000/api/clients
+    authorization-uri: http://localhost:9000/oauth2/authorize
+    token-uri: http://localhost:9000/oauth2/token
+    grant-type: authorization_code
+    redirect-uri: http://127.0.0.1:8081
+    scope: openid read write
+
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
   application:
     name: resource-server
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/testdb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect

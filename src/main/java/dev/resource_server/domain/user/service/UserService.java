@@ -1,6 +1,7 @@
 package dev.resource_server.domain.user.service;
 
 import dev.resource_server.domain.user.domain.User;
+import dev.resource_server.domain.user.dto.UserResponse;
 import dev.resource_server.domain.user.dto.OAuth2UserInfo;
 import dev.resource_server.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Transactional
 public class UserService {
+
     private final UserRepository userRepository;
 
     /**
@@ -40,5 +42,12 @@ public class UserService {
 
     public void saveOrUpdateToken(User user, String accessToken, String refreshToken) {
         user.updateTokens(accessToken, refreshToken);
+    }
+
+    public UserResponse getUser(Long authId) {
+        User user = userRepository.findByAuthId(authId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+
+        return new UserResponse(user);
     }
 }
