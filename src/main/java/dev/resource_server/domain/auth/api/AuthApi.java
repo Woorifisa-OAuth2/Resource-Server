@@ -22,13 +22,6 @@ public class AuthApi {
         authService.authorize(response);
     }
 
-    @GetMapping("/callback")
-    public ResponseEntity<TokenResponse> callback(@RequestParam String code) {
-        TokenRequest request = new TokenRequest(code);
-        TokenResponse tokenResponse = authService.getToken(request);
-        return ResponseEntity.ok(tokenResponse);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> getToken(@RequestBody TokenRequest request) {
         TokenResponse tokenResponse = authService.getToken(request);
