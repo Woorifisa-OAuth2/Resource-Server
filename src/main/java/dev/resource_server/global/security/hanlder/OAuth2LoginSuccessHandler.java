@@ -29,8 +29,6 @@ public class OAuth2LoginSuccessHandler {
     private final JwtDecoder jwtDecoder;
     private final UserService userService;
 
-    @Value("${jwt.expiration}")
-    private Long jwtExpiration;
 
     public String onSuccess(OAuth2AccessTokenResponse authentication) {
         log.debug("OAuth2 로그인 성공");

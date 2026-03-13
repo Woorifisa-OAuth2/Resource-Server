@@ -3,11 +3,9 @@ package dev.resource_server.global.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +21,6 @@ public class JwtUtils {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final String COOKIE_NAME = "accessToken";
 
     public JwtUtils(@Value("${jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
@@ -32,8 +29,6 @@ public class JwtUtils {
     /**
      * 토큰 생성
      * userId claims에 올림
-     * @param userId
-     * @return
      */
     public String createToken(Long userId, Instant expiredAt) {
         return Jwts.builder()
@@ -54,24 +49,19 @@ public class JwtUtils {
 
     /**
      * 토큰에 userId가 있는지 검증
-     * @param token
-     * @return
      */
     public boolean isValidateToken(String token) {
         try {
             getClaims(token);
             return true;
         } catch (Exception e) {
-            log.error("유효하지 않은 JWT 토큰", e.getMessage());
+            log.error("유효하지 않은 JWT 토큰 error={}", e.getMessage());
             return false;
         }
     }
 
     /**
      * 토큰 만료 여부 확인
-     *
-     * @param token
-     * @return
      */
     public boolean isExpired(String token) {
         try {

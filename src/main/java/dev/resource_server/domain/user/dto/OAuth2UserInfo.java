@@ -16,10 +16,10 @@ public record OAuth2UserInfo(
 
     public static OAuth2UserInfo from(Jwt jwt) {
         return OAuth2UserInfo.builder()
-                             .userId(jwt.getClaim("user_id"))
+                             .userId(jwt.getClaim("user_id") instanceof Number n ? n.longValue() : null)
                              .username(jwt.getClaimAsString("username"))
                              .name(jwt.getClaimAsString("name"))
-                             .age(jwt.getClaim("age"))
+                             .age(jwt.getClaim("age") instanceof Number n ? n.intValue() : null)
                              .gender(jwt.getClaimAsString("gender"))
                              .email(jwt.getClaimAsString("email"))
                              .role(jwt.getClaimAsString("role"))

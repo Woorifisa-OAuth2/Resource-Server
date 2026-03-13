@@ -5,6 +5,7 @@ import dev.resource_server.domain.auth.dto.ClientRegistrationRequest;
 import dev.resource_server.domain.auth.dto.ClientRegistrationResponse;
 import dev.resource_server.domain.auth.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthClientInitializer implements ApplicationRunner {
@@ -32,6 +34,7 @@ public class AuthClientInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        log.info("앱 등록 시작");
         if (clientRepository.existsByClientName(CLIENT_NAME)) {
             return;
         }
@@ -56,5 +59,6 @@ public class AuthClientInitializer implements ApplicationRunner {
                 .build();
 
         clientRepository.save(client);
+        log.info("앱 등록 완료");
     }
 }

@@ -7,6 +7,7 @@ import dev.resource_server.domain.auth.repository.ClientRepository;
 import dev.resource_server.global.security.hanlder.OAuth2LoginSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.client.endpoint.RestClientAuthorizationCodeTokenResponseClient;
@@ -21,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -88,9 +90,11 @@ public class AuthService {
         );
 
         OAuth2AccessTokenResponse tokenResponse = tokenResponseClient.getTokenResponse(grantRequest);
+        log.info("Auth AT 발급완료 AT = {}", tokenResponse.getAccessToken().getTokenValue());
 
         String resourceJwt = loginSuccessHandler.onSuccess(tokenResponse);
 
+        log.info("Client AT 발급완료 AT = {}", resourceJwt);
         return TokenResponse.builder()
                 .accessToken(resourceJwt)
                 .build();
