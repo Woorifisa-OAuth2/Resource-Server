@@ -2,6 +2,7 @@ package dev.resource_server.domain.auth.service;
 
 import dev.resource_server.domain.auth.dto.TokenRequest;
 import dev.resource_server.domain.auth.dto.TokenResponse;
+import dev.resource_server.global.security.hanlder.OAuth2LoginSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import java.io.IOException;
 public class AuthService {
 
     private final RestClientAuthorizationCodeTokenResponseClient tokenResponseClient;
+    private final OAuth2LoginSuccessHandler loginSuccessHandler;
 
     @Value("${auth.server.authorization-uri}")
     private String authorizationUri;
@@ -86,10 +88,10 @@ public class AuthService {
 
         OAuth2AccessTokenResponse tokenResponse = tokenResponseClient.getTokenResponse(grantRequest);
 
-        // Todo: DB 처리
+        String resourceJwt = loginSuccessHandler.onSuccess(tokenResponse);
 
         return TokenResponse.builder()
-                .accessToken(tokenResponse.getAccessToken().getTokenValue())
+                .accessToken(resourceJwt)
                 .build();
     }
 }
