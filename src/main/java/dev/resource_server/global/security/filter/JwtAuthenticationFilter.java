@@ -26,8 +26,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 1. 요청에서 jwt 출출
             String token = jwtUtils.getTokenFromHeader(request);
 
+            log.info("추출된 토큰 token = {}", token);
+
             // 2. 토큰 검증
             if (token == null) {
+                log.info("토큰이 없습니다.");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -39,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // 3. 토큰에서 userId 추출
             Long userId = jwtUtils.getUserIdFromToken(token);
+            log.info("추출된 userId: {}", userId);
 
             // 4. SecurityContext에 인증 정보 저장
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -54,6 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             }
         } catch (Exception e) {
+            log.info("error: {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }

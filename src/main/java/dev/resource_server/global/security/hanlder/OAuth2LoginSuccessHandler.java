@@ -2,22 +2,14 @@ package dev.resource_server.global.security.hanlder;
 
 import dev.resource_server.domain.user.domain.User;
 import dev.resource_server.domain.user.dto.OAuth2UserInfo;
-import dev.resource_server.domain.user.repository.UserRepository;
 import dev.resource_server.domain.user.service.UserService;
 import dev.resource_server.global.utils.JwtUtils;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.net.http.HttpRequest;
 import java.time.Instant;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 @Slf4j
