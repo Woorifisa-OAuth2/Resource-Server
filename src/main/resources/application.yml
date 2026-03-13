@@ -4,8 +4,9 @@ auth:
     authorization-uri: http://localhost:9000/oauth2/authorize
     token-uri: http://localhost:9000/oauth2/token
     grant-type: authorization_code
-    redirect-uri: http://127.0.0.1:8081
+    redirect-uri: http://localhost:3000/callabck
     scope: openid read write
+    jwk-set-uri: http://localhost:9000/oauth2/jwks
 
 spring:
   security:
@@ -30,3 +31,10 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret: vnbuinfgjkwanuyfivvdshjfgwyuecnyuehwf
+  expiration: 604800000
+
+frontend:
+  url: http://localhost:3000
