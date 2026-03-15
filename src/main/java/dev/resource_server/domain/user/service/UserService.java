@@ -44,8 +44,8 @@ public class UserService {
         user.updateTokens(accessToken, refreshToken);
     }
 
-    public UserResponse getUser(Long authId) {
-        User user = userRepository.findById(authId)
+    public UserResponse getUser(Long userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
         return new UserResponse(user);
