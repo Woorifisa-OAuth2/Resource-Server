@@ -5,31 +5,7 @@
 
 ## 시스템 아키텍처
 
-```
-Frontend (React/Next.js)       Resource Server (Spring Boot)       Authorization Server
-    │                                │                                    │
-    │  GET /api/auth/code            │                                    │
-    │───────────────────────────────>│                                    │
-    │  302 Redirect ────────────────>│───────────────────────────────────>│
-    │                                │              로그인 + 동의         │
-    │<───────────────────────────────│<─────── code callback ─────────────│
-    │                                │                                    │
-    │  POST /api/auth/login          │                                    │
-    │   { "code": "xxx" }            │                                    │
-    │───────────────────────────────>│  code → token 교환                 │
-    │                                │───────────────────────────────────>│
-    │                                │<── Access Token (JWT) ─────────────│
-    │                                │                                    │
-    │                                │  JWT 디코딩 → 사용자 저장          │
-    │                                │  자체 JWT 발급                     │
-    │                                │                                    │
-    │<── { "access_token": "xxx" } ──│                                    │
-    │                                │                                    │
-    │  이후 API 요청                 │                                    │
-    │  Authorization: Bearer <token> │                                    │
-    │───────────────────────────────>│  JwtAuthenticationFilter           │
-    │                                │  자체 JWT 검증 → SecurityContext   │
-```
+<img width="2094" height="1139" alt="Image" src="https://github.com/user-attachments/assets/bc5f347e-3726-4d29-9cb1-a6d11d926cfc" />
 
 ## 토큰 전략
 
